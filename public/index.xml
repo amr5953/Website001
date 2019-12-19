@@ -21,15 +21,6 @@
     </item>
     
     <item>
-      <title></title>
-      <link>/projects/project2/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>/projects/project2/</guid>
-      <description>title: ‘Project 2: Modeling, Testing, and Predicting’ author: “SDS348 Fall 2019” date: ‘11/25/19’ output: pdf_document: toc: yes html_document: toc: yes toc_float: collapsed: no smooth_scroll: yes</description>
-    </item>
-    
-    <item>
       <title>Project 1: Exploratory Data Analysis</title>
       <link>/projects/project1/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>

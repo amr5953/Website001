@@ -1,0 +1,133 @@
+---
+title: 'Project 1: Exploratory Data Analysis'
+author: "Allee Ramirez"
+date: "10/20/2019"
+output:
+  html_document:
+    toc: yes
+    toc_float:
+      collapsed: no
+      smooth_scroll: yes
+  pdf_document:
+    toc: yes
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+## Introduction
+
+The two datasets I chose are happy and SLID. The happy dataset is data with variables related to happiness from the General Social Survey from 1972 to 2006.it contains the variables of happy, year, age, sex, health, financial status, degree status, probability weight, and marital status. The SLID dataset is data from the 1994 wave of Canadian Survey of Labour and Income Dynamics. These two datasets were both retreived from rStudio. It contains the variables of wages, education, age, and language. I chose these two datasets because I was curious as to how different variables such as age, education level, health, martial status, and income affect an individual's overall happiness.I expect to find that the more income an indivual brings in will lead to a happier status and if they are in a relationship or married will lead to a happier status.  
+```{r} 
+library(tidyverse)
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(carData)
+library(GGally)
+
+glimpse(SLID)
+glimpse(happy)
+
+```
+
+## Tidying
+
+The function of na.omit was used to remove all NA's from the two datasets of happy and SLID. This will help in my future process of obtaining graphs and wrangling.  
+```{r} 
+glimpse(happy<-happy%>%na.omit)
+glimpse(SLID<-SLID%>%na.omit)
+
+```
+
+## Joining
+
+I chose to conduct an inner join between the two datasets because I wanted to combine it into one dataset with matches between the two datasets and drop all thoe that do not have a match. The first anti join returned 3991 obervations and the second antijoin contained 104 observations.  
+```{r}
+Happiness<- happy %>% inner_join(SLID, by= "age")   
+glimpse(Happiness)
+aj1<-anti_join(happy,SLID, by="age")
+glimpse(aj1)
+aj2<-anti_join(SLID, happy, by="age")
+glimpse(aj2)
+```
+
+## Wrangling
+
+```{r}
+#FILTER()
+glimpse(Happiness%>%filter(health=="good"))
+#SELECT()
+glimpse(Happiness%>%select(age, happy, health))
+#ARRANGE()
+glimpse(Happiness%>%arrange(wages))
+#GROUP_BY()
+glimpse(Happiness%>%group_by(education)%>%summarize(mean_age=mean(age)))
+#MUTATE()
+glimpse(Happiness%>%mutate(happy, wage_status = wages*2))
+#Age
+Happiness%>%summarise(mean_age=mean(age),sd_age=sd(age),var_age=var(age),IQR_age=IQR(age),min_age=min(age),med_age=median(age),max_age=max(age),ndist_age=n_distinct(age),first_age=first(age), last_age=last(age))
+#Year
+Happiness%>%summarise(mean_year=mean(year),sd_year=sd(year),var_year=var(year),IQR_year=IQR(year),min_year=min(year),med_year=median(year),max_year=max(year),ndist_year=n_distinct(year),first_year=first(year), last_year=last(year))
+#wtssall
+Happiness%>%summarise(mean_wtssall=mean(wtssall),sd_wtssall=sd(wtssall),var_wtssall=var(wtssall),IQR_wtssall=IQR(wtssall),min_wtssall=min(wtssall),med_wtssall=median(wtssall),max_wtssall=max(wtssall),ndist_wtssall=n_distinct(wtssall),first_wtssall=first(wtssall), last_wtssall=last(wtssall))
+#Wages
+Happiness%>%summarise(mean_wages=mean(wages),sd_wages=sd(wages),var_wages=var(wages),IQR_wages=IQR(wages),min_wages=min(wages),med_wages=median(wages),max_wages=max(wages),ndist_wages=n_distinct(wages),first_wages=first(wages), last_wages=last(wages))
+#Education
+Happiness%>%summarise(mean_education=mean(education),sd_education=sd(education),var_education=var(education),IQR_education=IQR(education),min_education=min(education),med_education=median(education),max_education=max(education),ndist_education=n_distinct(education),first_education=first(education), last_education=last(education))
+#Wages grouped by happy
+Happiness%>%group_by(happy)%>%summarise(mean_wages=mean(wages),sd_wages=sd(wages),var_wages=var(wages),IQR_wages=IQR(wages),min_wages=min(wages),med_wages=median(wages),max_wages=max(wages),ndist_wages=n_distinct(wages),first_wages=first(wages),last_wages=last(wages))
+#Age grouped by Health
+Happiness%>%group_by(health)%>%summarise(mean_age=mean(age),sd_age=sd(age),var_age=var(age),IQR_age=IQR(age),min_age=min(age),med_age=median(age),max_age=max(age),ndist_age=n_distinct(age),first_age=first(age), last_age=last(age))
+#Wtsall grouped by Martial
+Happiness%>%group_by(marital)%>%summarise(mean_wtssall=mean(wtssall),sd_wtssall=sd(wtssall),var_wtssall=var(wtssall),IQR_wtssall=IQR(wtssall),min_wtssall=min(wtssall),med_wtssall=median(wtssall),max_wtssall=max(wtssall),ndist_wtssall=n_distinct(wtssall),first_wtssall=first(wtssall), last_wtssall=last(wtssall))
+#Year grouped by finrela 
+Happiness%>%group_by(finrela)%>%summarise(mean_year=mean(year),sd_year=sd(year),var_year=var(year),IQR_year=IQR(year),min_year=min(year),med_year=median(year),max_year=max(year),ndist_year=n_distinct(year),first_year=first(year), last_year=last(year))
+#Degree grouped by education
+Happiness%>%group_by(degree)%>%summarise(mean_education=mean(education),sd_education=sd(education),var_education=var(education),IQR_education=IQR(education),min_education=min(education),med_education=median(education),max_education=max(education),ndist_education=n_distinct(education),first_education=first(education), last_education=last(education))
+#Wages grouped by sex.x
+Happiness%>%group_by(sex.x)%>%summarise(mean_wages=mean(wages),sd_wages=sd(wages),var_wages=var(wages),IQR_wages=IQR(wages),min_wages=min(wages),med_wages=median(wages),max_wages=max(wages),ndist_wages=n_distinct(wages),first_wages=first(wages), last_wages=last(wages))
+```
+
+##Visualizations
+
+A barchart was created to show the correlation between sex and happy status. Sex is on the x axis, and happy status is the fill. This plot shows that due to the amount of data there is, 2529648 observations, both male and females seem to have equal levels of happiness. The only slight difference is females having a slightly more "very happy" status than males according to this plot. 
+```{r}
+library(ggplot2)
+
+plot_2<-ggplot(Happiness, aes(x = sex.x, fill=happy))+
+geom_bar(position='fill')
+plot_2+ggtitle("Sex by Happy Status") 
+
+```
+A barchart was created to show the correlation between age, wages, and happy status. Age is on the x axis, wages is on the y axis, and happy is the fill. Based on this chart, wages increase as age increases. In addition, all three happy statuses seem to be equal across each age except for the last three age groups. 
+```{r}
+plot1 <- ggplot(data = Happiness, aes(x = age, y = wages, color=happy))+
+  geom_bar(stat="summary",fun.y="mean")+geom_errorbar(stat="summary") 
+plot1 + ggtitle("Wages vs Age") + ylab("Hourly Wages") + xlab("Age") 
+```
+
+
+#Clustering
+The variables I have chosen to cluster are age, wages, and happy status. 
+```{r}
+clust_data<-Happiness%>%dplyr::select(age,wages,happy)
+
+hap1<-Happiness%>%mutate(cluster=sample(c('1','2','3'),1,replace=T))%>%
+  group_by(cluster)%>%summarize(age=mean(age),wages=mean(wages))
+ggplot(Happiness)+geom_point(aes(x=wages,y= age, color=happy))+
+  geom_point(data=hap1,aes(wages,age,fill=""),color="red",size=3.5)+scale_fill_manual(name="cluster",values = "black")
+ 
+
+```
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="author" content="Allee Ramirez" />
+    <meta name="description" content="Describe your website">
+    <link rel="shortcut icon" type="image/x-icon" href="/img/favicon.ico">
+    <title>Project 1: Exploratory Data Analysis</title>
+    <meta name="generator" content="Hugo 0.61.0" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="/css/main.css" />
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,400,200bold,400old" />
+    
+    <!--[if lt IE 9]>
+			<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+			<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+		<![endif]-->
+
+    
+  </head>
+
+  <body>
+    <div id="wrap">
+
+      
+      <nav class="navbar navbar-default">
+  <div class="container">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="/"><i class="fa fa-home"></i></a>
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <div class="navbar-collapse collapse" id="navbar">
+      <ul class="nav navbar-nav navbar-right">
+      
+        
+        <li><a href="/blog/">BLOG</a></li>
+        
+        <li><a href="/projects/">PROJECTS</a></li>
+        
+        <li><a href="resume2019.pdf">RESUME</a></li>
+        
+      
+      </ul>
+    </div>
+  </div>
+</nav>
+
+      
+      <div class="container">
+        <div class="blog-post">
+          <h3>
+            <strong><a href="/projects/project1/">Project 1: Exploratory Data Analysis</a></strong>
+          </h3>
+        </div>
+        <div class="blog-title">
+          <h4>
+          January 1, 0001
+            &nbsp;&nbsp;
+            
+          </h4>
+        </div>
+        <div class="panel panel-default">
+          <div class="panel-body">
+            <div class="blogpost">
+              
+
+
+<div id="introduction" class="section level2">
+<h2>Introduction</h2>
+<p>The two datasets I chose are happy and SLID. The happy dataset is data with variables related to happiness from the General Social Survey from 1972 to 2006.it contains the variables of happy, year, age, sex, health, financial status, degree status, probability weight, and marital status. The SLID dataset is data from the 1994 wave of Canadian Survey of Labour and Income Dynamics. These two datasets were both retreived from rStudio. It contains the variables of wages, education, age, and language. I chose these two datasets because I was curious as to how different variables such as age, education level, health, martial status, and income affect an individual’s overall happiness.I expect to find that the more income an indivual brings in will lead to a happier status and if they are in a relationship or married will lead to a happier status.</p>
+<pre class="r"><code>library(tidyverse)</code></pre>
+<pre><code>## ── Attaching packages ────────────────────────────────────────────────────────── tidyverse 1.3.0 ──</code></pre>
+<pre><code>## ✓ ggplot2 3.2.1     ✓ purrr   0.3.3
+## ✓ tibble  2.1.3     ✓ dplyr   0.8.3
+## ✓ tidyr   1.0.0     ✓ stringr 1.4.0
+## ✓ readr   1.3.1     ✓ forcats 0.4.0</code></pre>
+<pre><code>## ── Conflicts ───────────────────────────────────────────────────────────── tidyverse_conflicts() ──
+## x dplyr::filter() masks stats::filter()
+## x dplyr::lag()    masks stats::lag()</code></pre>
+<pre class="r"><code>library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(carData)
+library(GGally)</code></pre>
+<pre><code>## Registered S3 method overwritten by &#39;GGally&#39;:
+##   method from   
+##   +.gg   ggplot2</code></pre>
+<pre><code>## 
+## Attaching package: &#39;GGally&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:dplyr&#39;:
+## 
+##     nasa</code></pre>
+<pre class="r"><code>glimpse(SLID)</code></pre>
+<pre><code>## Observations: 7,425
+## Variables: 5
+## $ wages     &lt;dbl&gt; 10.56, 11.00, NA, 17.76, NA, 14.00, NA, NA, 8.20, NA, NA, 1…
+## $ education &lt;dbl&gt; 15.0, 13.2, 16.0, 14.0, 8.0, 16.0, 12.0, 14.5, 15.0, 10.0, …
+## $ age       &lt;int&gt; 40, 19, 49, 46, 71, 50, 70, 42, 31, 56, 71, 30, 56, 61, 25,…
+## $ sex       &lt;fct&gt; Male, Male, Male, Male, Male, Female, Female, Female, Male,…
+## $ language  &lt;fct&gt; English, English, Other, Other, English, English, English, …</code></pre>
+<pre class="r"><code>glimpse(happy)</code></pre>
+<pre><code>## Observations: 51,020
+## Variables: 10
+## $ id      &lt;dbl&gt; 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18…
+## $ happy   &lt;fct&gt; not too happy, not too happy, pretty happy, not too happy, pr…
+## $ year    &lt;dbl&gt; 1972, 1972, 1972, 1972, 1972, 1972, 1972, 1972, 1972, 1972, 1…
+## $ age     &lt;dbl&gt; 23, 70, 48, 27, 61, 26, 28, 27, 21, 30, 30, 56, 54, 49, 41, 5…
+## $ sex     &lt;fct&gt; female, male, female, female, female, male, male, male, femal…
+## $ marital &lt;fct&gt; never married, married, married, married, married, never marr…
+## $ degree  &lt;fct&gt; bachelor, lt high school, high school, bachelor, high school,…
+## $ finrela &lt;fct&gt; average, above average, average, average, above average, abov…
+## $ health  &lt;fct&gt; good, fair, excellent, good, good, good, excellent, good, exc…
+## $ wtssall &lt;dbl&gt; 0.4446, 0.8893, 0.8893, 0.8893, 0.8893, 0.4446, 0.4446, 0.444…</code></pre>
+</div>
+<div id="tidying" class="section level2">
+<h2>Tidying</h2>
+<p>The function of na.omit was used to remove all NA’s from the two datasets of happy and SLID. This will help in my future process of obtaining graphs and wrangling.</p>
+<pre class="r"><code>glimpse(happy&lt;-happy%&gt;%na.omit)</code></pre>
+<pre><code>## Observations: 34,823
+## Variables: 10
+## $ id      &lt;dbl&gt; 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18…
+## $ happy   &lt;fct&gt; not too happy, not too happy, pretty happy, not too happy, pr…
+## $ year    &lt;dbl&gt; 1972, 1972, 1972, 1972, 1972, 1972, 1972, 1972, 1972, 1972, 1…
+## $ age     &lt;dbl&gt; 23, 70, 48, 27, 61, 26, 28, 27, 21, 30, 30, 56, 54, 49, 41, 5…
+## $ sex     &lt;fct&gt; female, male, female, female, female, male, male, male, femal…
+## $ marital &lt;fct&gt; never married, married, married, married, married, never marr…
+## $ degree  &lt;fct&gt; bachelor, lt high school, high school, bachelor, high school,…
+## $ finrela &lt;fct&gt; average, above average, average, average, above average, abov…
+## $ health  &lt;fct&gt; good, fair, excellent, good, good, good, excellent, good, exc…
+## $ wtssall &lt;dbl&gt; 0.4446, 0.8893, 0.8893, 0.8893, 0.8893, 0.4446, 0.4446, 0.444…</code></pre>
+<pre class="r"><code>glimpse(SLID&lt;-SLID%&gt;%na.omit)</code></pre>
+<pre><code>## Observations: 3,987
+## Variables: 5
+## $ wages     &lt;dbl&gt; 10.56, 11.00, 17.76, 14.00, 8.20, 16.97, 6.70, 14.00, 19.20…
+## $ education &lt;dbl&gt; 15.0, 13.2, 14.0, 16.0, 15.0, 13.5, 12.0, 14.0, 18.0, 11.0,…
+## $ age       &lt;int&gt; 40, 19, 46, 50, 31, 30, 61, 46, 43, 17, 46, 32, 35, 39, 32,…
+## $ sex       &lt;fct&gt; Male, Male, Male, Female, Male, Female, Female, Female, Mal…
+## $ language  &lt;fct&gt; English, English, Other, English, English, English, English…</code></pre>
+</div>
+<div id="joining" class="section level2">
+<h2>Joining</h2>
+<p>I chose to conduct an inner join between the two datasets because I wanted to combine it into one dataset with matches between the two datasets and drop all thoe that do not have a match. The first anti join returned 3991 obervations and the second antijoin contained 104 observations.</p>
+<pre class="r"><code>Happiness&lt;- happy %&gt;% inner_join(SLID, by= &quot;age&quot;)   
+glimpse(Happiness)</code></pre>
+<pre><code>## Observations: 2,529,648
+## Variables: 14
+## $ id        &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,…
+## $ happy     &lt;fct&gt; not too happy, not too happy, not too happy, not too happy,…
+## $ year      &lt;dbl&gt; 1972, 1972, 1972, 1972, 1972, 1972, 1972, 1972, 1972, 1972,…
+## $ age       &lt;dbl&gt; 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23,…
+## $ sex.x     &lt;fct&gt; female, female, female, female, female, female, female, fem…
+## $ marital   &lt;fct&gt; never married, never married, never married, never married,…
+## $ degree    &lt;fct&gt; bachelor, bachelor, bachelor, bachelor, bachelor, bachelor,…
+## $ finrela   &lt;fct&gt; average, average, average, average, average, average, avera…
+## $ health    &lt;fct&gt; good, good, good, good, good, good, good, good, good, good,…
+## $ wtssall   &lt;dbl&gt; 0.4446, 0.4446, 0.4446, 0.4446, 0.4446, 0.4446, 0.4446, 0.4…
+## $ wages     &lt;dbl&gt; 7.61, 5.54, 15.10, 15.42, 6.36, 8.00, 4.82, 9.00, 10.25, 10…
+## $ education &lt;dbl&gt; 14.0, 18.0, 15.5, 14.0, 14.5, 13.0, 15.0, 15.5, 12.2, 12.0,…
+## $ sex.y     &lt;fct&gt; Female, Male, Female, Male, Male, Male, Male, Male, Female,…
+## $ language  &lt;fct&gt; English, English, English, English, English, English, Engli…</code></pre>
+<pre class="r"><code>aj1&lt;-anti_join(happy,SLID, by=&quot;age&quot;)
+glimpse(aj1)</code></pre>
+<pre><code>## Observations: 3,991
+## Variables: 10
+## $ id      &lt;dbl&gt; 2, 25, 34, 41, 106, 124, 131, 139, 140, 142, 145, 148, 169, 1…
+## $ happy   &lt;fct&gt; not too happy, pretty happy, very happy, very happy, pretty h…
+## $ year    &lt;dbl&gt; 1972, 1972, 1972, 1972, 1972, 1972, 1972, 1972, 1972, 1972, 1…
+## $ age     &lt;dbl&gt; 70, 71, 78, 76, 74, 70, 75, 73, 73, 84, 82, 72, 81, 76, 76, 7…
+## $ sex     &lt;fct&gt; male, female, female, female, female, male, male, female, mal…
+## $ marital &lt;fct&gt; married, married, married, widowed, married, widowed, married…
+## $ degree  &lt;fct&gt; lt high school, bachelor, lt high school, lt high school, lt …
+## $ finrela &lt;fct&gt; above average, average, average, below average, average, aver…
+## $ health  &lt;fct&gt; fair, excellent, excellent, excellent, fair, fair, poor, fair…
+## $ wtssall &lt;dbl&gt; 0.8893, 0.8893, 0.8893, 0.4446, 0.8893, 1.3339, 0.8893, 0.889…</code></pre>
+<pre class="r"><code>aj2&lt;-anti_join(SLID, happy, by=&quot;age&quot;)
+glimpse(aj2)</code></pre>
+<pre><code>## Observations: 104
+## Variables: 5
+## $ wages     &lt;dbl&gt; 7.25, 6.70, 5.00, 6.75, 6.48, 5.76, 3.75, 5.90, 7.15, 6.62,…
+## $ education &lt;dbl&gt; 11.0, 11.0, 11.0, 10.0, 11.0, 10.0, 11.0, 10.0, 11.0, 10.0,…
+## $ age       &lt;int&gt; 17, 17, 17, 16, 17, 17, 17, 16, 17, 17, 17, 16, 17, 17, 17,…
+## $ sex       &lt;fct&gt; Male, Female, Male, Male, Male, Male, Male, Male, Male, Fem…
+## $ language  &lt;fct&gt; English, English, Other, Other, English, English, English, …</code></pre>
+</div>
+<div id="wrangling" class="section level2">
+<h2>Wrangling</h2>
+<pre class="r"><code>#FILTER()
+glimpse(Happiness%&gt;%filter(health==&quot;good&quot;))</code></pre>
+<pre><code>## Observations: 1,174,878
+## Variables: 14
+## $ id        &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,…
+## $ happy     &lt;fct&gt; not too happy, not too happy, not too happy, not too happy,…
+## $ year      &lt;dbl&gt; 1972, 1972, 1972, 1972, 1972, 1972, 1972, 1972, 1972, 1972,…
+## $ age       &lt;dbl&gt; 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23,…
+## $ sex.x     &lt;fct&gt; female, female, female, female, female, female, female, fem…
+## $ marital   &lt;fct&gt; never married, never married, never married, never married,…
+## $ degree    &lt;fct&gt; bachelor, bachelor, bachelor, bachelor, bachelor, bachelor,…
+## $ finrela   &lt;fct&gt; average, average, average, average, average, average, avera…
+## $ health    &lt;fct&gt; good, good, good, good, good, good, good, good, good, good,…
+## $ wtssall   &lt;dbl&gt; 0.4446, 0.4446, 0.4446, 0.4446, 0.4446, 0.4446, 0.4446, 0.4…
+## $ wages     &lt;dbl&gt; 7.61, 5.54, 15.10, 15.42, 6.36, 8.00, 4.82, 9.00, 10.25, 10…
+## $ education &lt;dbl&gt; 14.0, 18.0, 15.5, 14.0, 14.5, 13.0, 15.0, 15.5, 12.2, 12.0,…
+## $ sex.y     &lt;fct&gt; Female, Male, Female, Male, Male, Male, Male, Male, Female,…
+## $ language  &lt;fct&gt; English, English, English, English, English, English, Engli…</code></pre>
+<pre class="r"><code>#SELECT()
+glimpse(Happiness%&gt;%select(age, happy, health))</code></pre>
+<pre><code>## Observations: 2,529,648
+## Variables: 3
+## $ age    &lt;dbl&gt; 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23…
+## $ happy  &lt;fct&gt; not too happy, not too happy, not too happy, not too happy, no…
+## $ health &lt;fct&gt; good, good, good, good, good, good, good, good, good, good, go…</code></pre>
+<pre class="r"><code>#ARRANGE()
+glimpse(Happiness%&gt;%arrange(wages))</code></pre>
+<pre><code>## Observations: 2,529,648
+## Variables: 14
+## $ id        &lt;dbl&gt; 81, 164, 206, 224, 285, 288, 486, 487, 530, 603, 708, 730, …
+## $ happy     &lt;fct&gt; pretty happy, very happy, very happy, pretty happy, very ha…
+## $ year      &lt;dbl&gt; 1972, 1972, 1972, 1972, 1972, 1972, 1972, 1972, 1972, 1972,…
+## $ age       &lt;dbl&gt; 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44, 44,…
+## $ sex.x     &lt;fct&gt; male, male, female, female, female, female, female, male, f…
+## $ marital   &lt;fct&gt; married, married, married, married, married, married, marri…
+## $ degree    &lt;fct&gt; lt high school, lt high school, lt high school, high school…
+## $ finrela   &lt;fct&gt; average, above average, average, average, below average, av…
+## $ health    &lt;fct&gt; fair, excellent, poor, good, fair, excellent, good, excelle…
+## $ wtssall   &lt;dbl&gt; 1.7786, 0.8893, 0.8893, 0.8893, 1.3339, 1.3339, 0.8893, 0.8…
+## $ wages     &lt;dbl&gt; 2.3, 2.3, 2.3, 2.3, 2.3, 2.3, 2.3, 2.3, 2.3, 2.3, 2.3, 2.3,…
+## $ education &lt;dbl&gt; 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12,…
+## $ sex.y     &lt;fct&gt; Female, Female, Female, Female, Female, Female, Female, Fem…
+## $ language  &lt;fct&gt; English, English, English, English, English, English, Engli…</code></pre>
+<pre class="r"><code>#GROUP_BY()
+glimpse(Happiness%&gt;%group_by(education)%&gt;%summarize(mean_age=mean(age)))</code></pre>
+<pre><code>## Observations: 126
+## Variables: 2
+## $ education &lt;dbl&gt; 0.0, 1.0, 1.5, 2.0, 3.0, 4.0, 4.1, 4.5, 4.8, 5.0, 5.5, 6.0,…
+## $ mean_age  &lt;dbl&gt; 41.58041, 43.06071, 53.00000, 41.32733, 57.36244, 48.97725,…</code></pre>
+<pre class="r"><code>#MUTATE()
+glimpse(Happiness%&gt;%mutate(happy, wage_status = wages*2))</code></pre>
+<pre><code>## Observations: 2,529,648
+## Variables: 15
+## $ id          &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, …
+## $ happy       &lt;fct&gt; not too happy, not too happy, not too happy, not too happ…
+## $ year        &lt;dbl&gt; 1972, 1972, 1972, 1972, 1972, 1972, 1972, 1972, 1972, 197…
+## $ age         &lt;dbl&gt; 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 2…
+## $ sex.x       &lt;fct&gt; female, female, female, female, female, female, female, f…
+## $ marital     &lt;fct&gt; never married, never married, never married, never marrie…
+## $ degree      &lt;fct&gt; bachelor, bachelor, bachelor, bachelor, bachelor, bachelo…
+## $ finrela     &lt;fct&gt; average, average, average, average, average, average, ave…
+## $ health      &lt;fct&gt; good, good, good, good, good, good, good, good, good, goo…
+## $ wtssall     &lt;dbl&gt; 0.4446, 0.4446, 0.4446, 0.4446, 0.4446, 0.4446, 0.4446, 0…
+## $ wages       &lt;dbl&gt; 7.61, 5.54, 15.10, 15.42, 6.36, 8.00, 4.82, 9.00, 10.25, …
+## $ education   &lt;dbl&gt; 14.0, 18.0, 15.5, 14.0, 14.5, 13.0, 15.0, 15.5, 12.2, 12.…
+## $ sex.y       &lt;fct&gt; Female, Male, Female, Male, Male, Male, Male, Male, Femal…
+## $ language    &lt;fct&gt; English, English, English, English, English, English, Eng…
+## $ wage_status &lt;dbl&gt; 15.22, 11.08, 30.20, 30.84, 12.72, 16.00, 9.64, 18.00, 20…</code></pre>
+<pre class="r"><code>#Age
+Happiness%&gt;%summarise(mean_age=mean(age),sd_age=sd(age),var_age=var(age),IQR_age=IQR(age),min_age=min(age),med_age=median(age),max_age=max(age),ndist_age=n_distinct(age),first_age=first(age), last_age=last(age))</code></pre>
+<pre><code>##   mean_age   sd_age  var_age IQR_age min_age med_age max_age ndist_age
+## 1 36.72524 10.69769 114.4406      15      18      36      69        52
+##   first_age last_age
+## 1        23       23</code></pre>
+<pre class="r"><code>#Year
+Happiness%&gt;%summarise(mean_year=mean(year),sd_year=sd(year),var_year=var(year),IQR_year=IQR(year),min_year=min(year),med_year=median(year),max_year=max(year),ndist_year=n_distinct(year),first_year=first(year), last_year=last(year))</code></pre>
+<pre><code>##   mean_year  sd_year var_year IQR_year min_year med_year max_year ndist_year
+## 1  1988.155 10.33213  106.753       21     1972     1988     2006         23
+##   first_year last_year
+## 1       1972      2006</code></pre>
+<pre class="r"><code>#wtssall
+Happiness%&gt;%summarise(mean_wtssall=mean(wtssall),sd_wtssall=sd(wtssall),var_wtssall=var(wtssall),IQR_wtssall=IQR(wtssall),min_wtssall=min(wtssall),med_wtssall=median(wtssall),max_wtssall=max(wtssall),ndist_wtssall=n_distinct(wtssall),first_wtssall=first(wtssall), last_wtssall=last(wtssall))</code></pre>
+<pre><code>##   mean_wtssall sd_wtssall var_wtssall IQR_wtssall min_wtssall med_wtssall
+## 1     1.027669  0.4221039   0.1781717      0.2092      0.4297      1.0225
+##   max_wtssall ndist_wtssall first_wtssall last_wtssall
+## 1      6.4287           177        0.4446       1.7186</code></pre>
+<pre class="r"><code>#Wages
+Happiness%&gt;%summarise(mean_wages=mean(wages),sd_wages=sd(wages),var_wages=var(wages),IQR_wages=IQR(wages),min_wages=min(wages),med_wages=median(wages),max_wages=max(wages),ndist_wages=n_distinct(wages),first_wages=first(wages), last_wages=last(wages))</code></pre>
+<pre><code>##   mean_wages sd_wages var_wages IQR_wages min_wages med_wages max_wages
+## 1   15.85838 7.664168  58.73947        10       2.3     14.62     49.92
+##   ndist_wages first_wages last_wages
+## 1        1501        7.61      14.81</code></pre>
+<pre class="r"><code>#Education
+Happiness%&gt;%summarise(mean_education=mean(education),sd_education=sd(education),var_education=var(education),IQR_education=IQR(education),min_education=min(education),med_education=median(education),max_education=max(education),ndist_education=n_distinct(education),first_education=first(education), last_education=last(education))</code></pre>
+<pre><code>##   mean_education sd_education var_education IQR_education min_education
+## 1       13.54165     2.996178      8.977083           3.5             0
+##   med_education max_education ndist_education first_education last_education
+## 1            13            20             126              14           13.6</code></pre>
+<pre class="r"><code>#Wages grouped by happy
+Happiness%&gt;%group_by(happy)%&gt;%summarise(mean_wages=mean(wages),sd_wages=sd(wages),var_wages=var(wages),IQR_wages=IQR(wages),min_wages=min(wages),med_wages=median(wages),max_wages=max(wages),ndist_wages=n_distinct(wages),first_wages=first(wages),last_wages=last(wages))</code></pre>
+<pre><code>## # A tibble: 3 x 11
+##   happy mean_wages sd_wages var_wages IQR_wages min_wages med_wages max_wages
+##   &lt;fct&gt;      &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
+## 1 not …       15.8     7.73      59.8     10.1        2.3      14.4      49.9
+## 2 pret…       15.8     7.64      58.4      9.96       2.3      14.5      49.9
+## 3 very…       16.0     7.68      59.0     10.1        2.3      14.8      49.9
+## # … with 3 more variables: ndist_wages &lt;int&gt;, first_wages &lt;dbl&gt;,
+## #   last_wages &lt;dbl&gt;</code></pre>
+<pre class="r"><code>#Age grouped by Health
+Happiness%&gt;%group_by(health)%&gt;%summarise(mean_age=mean(age),sd_age=sd(age),var_age=var(age),IQR_age=IQR(age),min_age=min(age),med_age=median(age),max_age=max(age),ndist_age=n_distinct(age),first_age=first(age), last_age=last(age))</code></pre>
+<pre><code>## # A tibble: 4 x 11
+##   health mean_age sd_age var_age IQR_age min_age med_age max_age ndist_age
+##   &lt;fct&gt;     &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;     &lt;int&gt;
+## 1 poor       44.4   11.4    130.      18      18      46      69        52
+## 2 fair       39.0   11.6    135.      18      18      38      69        52
+## 3 good       36.5   10.5    110.      14      18      35      69        52
+## 4 excel…     35.4   10.1    102.      14      18      34      69        52
+## # … with 2 more variables: first_age &lt;dbl&gt;, last_age &lt;dbl&gt;</code></pre>
+<pre class="r"><code>#Wtsall grouped by Martial
+Happiness%&gt;%group_by(marital)%&gt;%summarise(mean_wtssall=mean(wtssall),sd_wtssall=sd(wtssall),var_wtssall=var(wtssall),IQR_wtssall=IQR(wtssall),min_wtssall=min(wtssall),med_wtssall=median(wtssall),max_wtssall=max(wtssall),ndist_wtssall=n_distinct(wtssall),first_wtssall=first(wtssall), last_wtssall=last(wtssall))</code></pre>
+<pre><code>## # A tibble: 5 x 11
+##   marital mean_wtssall sd_wtssall var_wtssall IQR_wtssall min_wtssall
+##   &lt;fct&gt;          &lt;dbl&gt;      &lt;dbl&gt;       &lt;dbl&gt;       &lt;dbl&gt;       &lt;dbl&gt;
+## 1 married        1.12       0.305      0.0929       0.128       0.430
+## 2 never …        1.03       0.570      0.325        0.857       0.430
+## 3 divorc…        0.748      0.386      0.149        0.506       0.430
+## 4 widowed        0.773      0.411      0.169        0.511       0.430
+## 5 separa…        0.753      0.409      0.167        0.511       0.430
+## # … with 5 more variables: med_wtssall &lt;dbl&gt;, max_wtssall &lt;dbl&gt;,
+## #   ndist_wtssall &lt;int&gt;, first_wtssall &lt;dbl&gt;, last_wtssall &lt;dbl&gt;</code></pre>
+<pre class="r"><code>#Year grouped by finrela 
+Happiness%&gt;%group_by(finrela)%&gt;%summarise(mean_year=mean(year),sd_year=sd(year),var_year=var(year),IQR_year=IQR(year),min_year=min(year),med_year=median(year),max_year=max(year),ndist_year=n_distinct(year),first_year=first(year), last_year=last(year))</code></pre>
+<pre><code>## # A tibble: 5 x 11
+##   finrela mean_year sd_year var_year IQR_year min_year med_year max_year
+##   &lt;fct&gt;       &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;
+## 1 far be…     1990.   10.1     102.        16     1972     1990     2006
+## 2 below …     1989.   10.1     103.        18     1972     1988     2006
+## 3 average     1988.   10.5     110.        19     1972     1988     2006
+## 4 above …     1988.   10.2     104.        18     1972     1989     2006
+## 5 far ab…     1990.    9.91     98.1       18     1972     1991     2006
+## # … with 3 more variables: ndist_year &lt;int&gt;, first_year &lt;dbl&gt;, last_year &lt;dbl&gt;</code></pre>
+<pre class="r"><code>#Degree grouped by education
+Happiness%&gt;%group_by(degree)%&gt;%summarise(mean_education=mean(education),sd_education=sd(education),var_education=var(education),IQR_education=IQR(education),min_education=min(education),med_education=median(education),max_education=max(education),ndist_education=n_distinct(education),first_education=first(education), last_education=last(education))</code></pre>
+<pre><code>## # A tibble: 5 x 11
+##   degree mean_education sd_education var_education IQR_education min_education
+##   &lt;fct&gt;           &lt;dbl&gt;        &lt;dbl&gt;         &lt;dbl&gt;         &lt;dbl&gt;         &lt;dbl&gt;
+## 1 lt hi…           13.3         3.06          9.36           3               0
+## 2 high …           13.6         2.96          8.75           3.5             0
+## 3 junio…           13.7         2.97          8.81           4               0
+## 4 bache…           13.7         3.01          9.06           4               0
+## 5 gradu…           13.4         3.10          9.64           3.6             0
+## # … with 5 more variables: med_education &lt;dbl&gt;, max_education &lt;dbl&gt;,
+## #   ndist_education &lt;int&gt;, first_education &lt;dbl&gt;, last_education &lt;dbl&gt;</code></pre>
+<pre class="r"><code>#Wages grouped by sex.x
+Happiness%&gt;%group_by(sex.x)%&gt;%summarise(mean_wages=mean(wages),sd_wages=sd(wages),var_wages=var(wages),IQR_wages=IQR(wages),min_wages=min(wages),med_wages=median(wages),max_wages=max(wages),ndist_wages=n_distinct(wages),first_wages=first(wages), last_wages=last(wages))</code></pre>
+<pre><code>## # A tibble: 2 x 11
+##   sex.x mean_wages sd_wages var_wages IQR_wages min_wages med_wages max_wages
+##   &lt;fct&gt;      &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
+## 1 male        15.8     7.68      58.9      9.98       2.3      14.5      49.9
+## 2 fema…       15.9     7.65      58.6     10          2.3      14.6      49.9
+## # … with 3 more variables: ndist_wages &lt;int&gt;, first_wages &lt;dbl&gt;,
+## #   last_wages &lt;dbl&gt;</code></pre>
+<p>##Visualizations</p>
+<p>A barchart was created to show the correlation between sex and happy status. Sex is on the x axis, and happy status is the fill. This plot shows that due to the amount of data there is, 2529648 observations, both male and females seem to have equal levels of happiness. The only slight difference is females having a slightly more “very happy” status than males according to this plot.</p>
+<pre class="r"><code>library(ggplot2)
+
+plot_2&lt;-ggplot(Happiness, aes(x = sex.x, fill=happy))+
+geom_bar(position=&#39;fill&#39;)
+plot_2+ggtitle(&quot;Sex by Happy Status&quot;) </code></pre>
+<p><img src="/project1_files/figure-html/unnamed-chunk-5-1.png" width="672" />
+A barchart was created to show the correlation between age, wages, and happy status. Age is on the x axis, wages is on the y axis, and happy is the fill. Based on this chart, wages increase as age increases. In addition, all three happy statuses seem to be equal across each age except for the last three age groups.</p>
+<pre class="r"><code>plot1 &lt;- ggplot(data = Happiness, aes(x = age, y = wages, color=happy))+
+  geom_bar(stat=&quot;summary&quot;,fun.y=&quot;mean&quot;)+geom_errorbar(stat=&quot;summary&quot;) 
+plot1 + ggtitle(&quot;Wages vs Age&quot;) + ylab(&quot;Hourly Wages&quot;) + xlab(&quot;Age&quot;) </code></pre>
+<pre><code>## No summary function supplied, defaulting to `mean_se()</code></pre>
+<p><img src="/project1_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<p>#Clustering
+The variables I have chosen to cluster are age, wages, and happy status.</p>
+<pre class="r"><code>clust_data&lt;-Happiness%&gt;%dplyr::select(age,wages,happy)
+
+hap1&lt;-Happiness%&gt;%mutate(cluster=sample(c(&#39;1&#39;,&#39;2&#39;,&#39;3&#39;),1,replace=T))%&gt;%
+  group_by(cluster)%&gt;%summarize(age=mean(age),wages=mean(wages))
+ggplot(Happiness)+geom_point(aes(x=wages,y= age, color=happy))+
+  geom_point(data=hap1,aes(wages,age,fill=&quot;&quot;),color=&quot;red&quot;,size=3.5)+scale_fill_manual(name=&quot;cluster&quot;,values = &quot;black&quot;)</code></pre>
+<p><img src="/project1_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+</div>
+
+              <hr>
+              <div class="related-posts">
+                <h5>Related Posts</h5>
+                
+              </div>
+            </div>
+          </div>
+          <hr>
+        <div class="disqus">
+  <div id="disqus_thread"></div>
+  <script type="text/javascript">
+
+    (function() {
+      
+      
+      if (window.location.hostname == "localhost")
+        return;
+
+      var disqus_shortname = '';
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+  </script>
+  <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  <a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+        </div>
+      </div>
+      
+    </div>
+
+    
+    <footer>
+  <div id="footer">
+    <div class="container">
+      <p class="text-muted">&copy; All rights reserved. Powered by <a href="https://gohugo.io/">Hugo</a> and
+      <a href="http://www.github.com/nurlansu/hugo-sustain/">sustain</a> with ♥</p>
+    </div>
+  </div>
+</footer>
+<div class="footer"></div>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<script src="/js/docs.min.js"></script>
+<script src="/js/main.js"></script>
+
+<script src="/js/ie10-viewport-bug-workaround.js"></script>
+
+
+    
+  </body>
+</html>

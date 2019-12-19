@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Projects on Allee Ramirez</title>
+    <link>/projects/</link>
+    <description>Recent content in Projects on Allee Ramirez</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-US</language>
+    
+	<atom:link href="/projects/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title></title>
+      <link>/projects/project2/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/projects/project2/</guid>
+      <description>title: ‘Project 2: Modeling, Testing, and Predicting’ author: “SDS348 Fall 2019” date: ‘11/25/19’ output: pdf_document: toc: yes html_document: toc: yes toc_float: collapsed: no smooth_scroll: yes</description>
+    </item>
+    
+    <item>
+      <title>Project 1: Exploratory Data Analysis</title>
+      <link>/projects/project1/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/projects/project1/</guid>
+      <description>Introduction The two datasets I chose are happy and SLID. The happy dataset is data with variables related to happiness from the General Social Survey from 1972 to 2006.it contains the variables of happy, year, age, sex, health, financial status, degree status, probability weight, and marital status. The SLID dataset is data from the 1994 wave of Canadian Survey of Labour and Income Dynamics. These two datasets were both retreived from rStudio.</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -17,7 +17,12 @@
       <pubDate>Wed, 18 Dec 2019 00:00:00 +0000</pubDate>
       
       <guid>/blog/python-basics-blog/</guid>
-      <description></description>
+      <description>##1. Variables In Python it is really easy to define a variable and set a value to it.
+ex)two = 2 some_number = 10000
+##2. Control Flow: conditional statements “If” uses an expression to evaluate to True or False. If it is True, it executes what it is inside the if statement.
+ex)if True: print(“Hello Python If”)
+if 2 &amp;gt; 1: print(“2 is greater than 1”)
+The “else” statement will be executed if “if” expression is false</description>
     </item>
     
   </channel>
